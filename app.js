@@ -2,7 +2,7 @@
 
 const calculator = document.querySelector('#calculator');
 const display = document.querySelector('.display');
-
+display.innerText = '0'
 /*-------------------------------- Variables --------------------------------*/
 let currentValue = '';
 let previousValue = '';
