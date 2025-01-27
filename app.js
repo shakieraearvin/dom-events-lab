@@ -1,80 +1,68 @@
 /*-------------------------------- Constants --------------------------------*/
 
-const buttons = document.querySelectorAll('.button');
+const calculator = document.querySelector('#calculator');
 const display = document.querySelector('.display');
 
 /*-------------------------------- Variables --------------------------------*/
-let currentValue = ''; 
-let previousValue = '';  
-let operator = ''
-
-
+let currentValue = '';
+let previousValue = '';
+let operator = '';
+let total = '';
 /*----------------------------- Event Listeners -----------------------------*/
 
-  buttons.forEach((button) => {
-
-    button.addEventListener( 'click', (event) => {
-        console.log(event.target.innerText);
-
-        if (!isNaN (buttonValue) || buttonValue === ".") {
-            clickedNumber(buttonValue);
-        } 
-        if (['+', '-', '*', '/'].includes(buttonValue)) {
-            clickedOperator(buttonValue);
-        }
-        if (buttonValue === '=') {
-            calculateResult(); 
-          }
-    });
-
-  })
-
-/*-------------------------------- Functions --------------------------------*/
-function clickedNumber(number) {
-    currentValue += number; 
-    display.innerText = currentValue; 
-  }
-
-  function clickedOperator(op) {
-    if (currentValue === '') return; 
-    previousValue = currentValue; 
-    operator = op; 
-    currentValue = ''; 
-  }
-
-  function calculateResult() {
-    if (currentValue === '' || previousValue === '') return; 
-
-    const current = parseFloat(currentValue); 
-    const previous = parseFloat(previousValue); 
-  
-    let result;
-    switch (operator) {
-      case '+':
-        result = previous + current;
-        break;
-      case '-':
-        result = previous - current;
-        break;
-      case '*':
-        result = previous * current;
-        break;
-      case '/':
-        result = previous / current;
-        break;
-      default:
-        return;
+/*----------------------------- Event Listeners -----------------------------*/
+calculator.addEventListener('click', (event) => {
+    // Handle numbers
+    if (event.target.classList.contains('number')) {
+        const number = event.target.innerText;
+        currentValue += number;
+        display.innerText = currentValue;
     }
-  
-    currentValue = result.toString(); 
-    previousValue = ''; 
-    operator = ''; 
-    display.innerText = currentValue; 
-  }
-  function clearCalculator() {
-    currentValue = '';
-    previousValue = '';
-    operator = '';
-    display.innerText = '0'; 
-  }
-
+    // Handle operators
+    if (event.target.classList.contains('operator')) {
+        if (event.target.innerText === 'C') {
+            currentValue = '';
+            previousValue = '';
+            operator = '';
+            total = '';
+            display.innerText = 0
+        } else {
+            operator = event.target.innerText;
+            previousValue = currentValue;
+            display.innerText = operator
+            currentValue = '';
+        }
+    }
+    if (event.target.classList.contains('equals')) {
+        if (operator === '+') {
+            total = addNumbers(previousValue, currentValue)
+            display.innerText = total;
+        }
+        else if (operator === '-') {
+            total = subtractNumbers(previousValue, currentValue)
+            display.innerText = total;
+        }
+        else if (operator === '*') {
+            total = multiplyNumbers(previousValue, currentValue)
+            display.innerText = total;
+        }
+        else if (operator === '/') {
+            total = divideNumbers(previousValue, currentValue)
+            display.innerText = total;
+        }
+    }
+}
+);
+/*-------------------------------- Functions --------------------------------*/
+function addNumbers(a, b) {
+    return Number(a) + Number(b);
+}
+function subtractNumbers(a, b) {
+    return Number(a) - Number(b);
+}
+function multiplyNumbers(a, b) {
+    return Number(a) * Number(b);
+}
+function divideNumbers(a, b) {
+    return Number(a) / Number(b);
+}
